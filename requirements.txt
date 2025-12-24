@@ -5,4 +5,4 @@ deep-translator
 sentence-transformers
 networkx
 numpy
-torch --index-url https://download.pytorch.org/whl/cpu
+# Note: 'torch' is handled in Dockerfile to save memory
