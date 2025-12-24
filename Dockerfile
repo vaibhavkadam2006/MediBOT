@@ -1,23 +1,18 @@
-# 1. Use a lightweight Python base
+# 1. Use lightweight Python
 FROM python:3.9-slim
 
-# 2. Set working directory
+# 2. Set working folder
 WORKDIR /app
 
-# 3. Copy requirements first
+# 3. Copy files
 COPY requirements.txt .
 
-# 4. Install dependencies efficiently (The FIX is here!)
-# --no-cache-dir prevents storing 1GB+ of cache files in RAM
-# We install torch CPU-only specifically before other packages
-RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
-    pip install --no-cache-dir -r requirements.txt
+# 4. Install dependencies (Now much faster & smaller!)
+RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy the rest of the app
+# 5. Copy app code
 COPY . .
 
-# 6. Expose port 5000
+# 6. Run
 EXPOSE 5000
-
-# 7. Start the app (Single worker to save RAM)
 CMD ["python", "app.py"]

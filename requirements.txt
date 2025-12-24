@@ -2,7 +2,6 @@ flask
 flask-cors
 groq
 deep-translator
-sentence-transformers
+rapidfuzz
 networkx
 numpy
-# Note: 'torch' is handled in Dockerfile to save memory
