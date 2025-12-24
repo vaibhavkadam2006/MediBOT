@@ -21,27 +21,24 @@ class DoctorSearchEngine:
         if not self.doctors:
             return []
 
-        # 1. Prepare a list of strings to search against
-        # We combine Specialty + Tags for better matching
+        # 1. Prepare strings to search against
         doc_strings = [f"{d['specialty']} {d['tags']}" for d in self.doctors]
         
-        # 2. Fuzzy Match (Finds the string most similar to the query)
-        # Returns a list of tuples: (matched_string, score, index)
+        # 2. Fuzzy Match (Switching to partial_ratio for better accuracy)
         results = process.extract(
             query, 
             doc_strings, 
-            scorer=fuzz.token_sort_ratio, 
+            scorer=fuzz.partial_ratio,  # <--- CHANGED THIS
             limit=top_k
         )
         
-        # 3. Retrieve the actual doctor objects based on index
         final_docs = []
         for match in results:
-            # match format: (string, score, index)
             score = match[1]
             idx = match[2]
             
-            if score > 30: # strictness threshold
+            # Since partial_ratio is generous, we increase threshold to 60
+            if score >= 60: 
                 final_docs.append(self.doctors[idx])
                 
         return final_docs
